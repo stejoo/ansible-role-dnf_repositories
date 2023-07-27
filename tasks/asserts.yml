@@ -1,0 +1,37 @@
+---
+- name: TODO
+  ansible.builtin.debug:
+    msg: Assertions need to be done
+
+
+# defaults file for repositories
+
+# List of RPM package signing keys to make sure are present on the system.
+# uses subkeys: =key, state, fingerprint and validate_certs.
+#rpm_keys: []
+
+# Instruct package manager to use managed repositories directory.
+# Also unsubscribes from Red Hat Subscription Management on RHEL systems.
+#repositories_managed: true
+
+#dnf_repositories: []
+# example:
+#dnf_repositories:
+#        - name: rhel-8-for-x86_64-baseos-rpms
+#          description: RHEL 8 RPM Mirror BaseOS Channel
+#          baseurl: "http://my.repo.server.example/rhel8/baseOS"
+#        - name: rhel-8-for-x86_64-appstream-rpms
+#          description: RHEL 8 RPM Mirror AppStream Channel
+#          baseurl: "http://my.repo.server.example/rhel8/AppStream"
+#        - name: fedora
+#          description: Fedora $releasever - $basearch
+#          # location
+#          metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+#          # signature verification
+#          repo_gpgcheck: false
+#          gpgcheck: true
+#          gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+#          # options
+#          enabled: true
+#          metadata_expire: 7d
+#          skip_if_unavailable: false

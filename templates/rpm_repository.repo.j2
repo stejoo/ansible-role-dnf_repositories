@@ -1,0 +1,33 @@
+# {{ ansible_managed }}
+
+[{{ repository.name }}]
+{% if repository.description is defined %}
+name={{ repository.description }}
+{% endif %}
+
+## Location
+{% if repository.metalink is defined %}
+metalink={{ repository.metalink }}
+{% elif repository.mirrorlist is defined %}
+mirrorlist={{ repository.mirrorlist }}
+{% else %}
+baseurl={{ repository.baseurl }}
+{% endif %}
+{% if repository.gpgcheck is defined or
+   repository.repo_gpgcheck is defined or
+   repository.gpgkey is defined %}
+
+## Signature verification
+{%   if repository.repo_gpgcheck %}repo_gpgcheck={{ repository.repo_gpgcheck | bool }}{% endif %}
+{%   if repository.gpgcheck %}gpgcheck={{ repository.gpgcheck | bool }}{% endif %}
+{%   if repository.gpgkey %}gpgkey={{ repository.gpgkey | bool }}{% endif %}
+{% endif %}
+
+## Options
+enabled={{ repository.enabled | default('True') | bool }}
+{% if repository.metadata_expire is defined %}
+metadata_expire={{ repository.metadata_expire }}
+{% endif %}
+{% if repository.skip_if_unavailable is defined %}
+skip_if_unavailable={{ repository.skip_if_unavailable | bool }}
+{% endif %}

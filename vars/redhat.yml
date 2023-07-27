@@ -1,0 +1,5 @@
+---
+# vars for role repositories for Red Hat family distributions
+
+repositories_default_dir: /etc/yum.repos.d
+repositories_managed_dir: /etc/yum.repos.managed
