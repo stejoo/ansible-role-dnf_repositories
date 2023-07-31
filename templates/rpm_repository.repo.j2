@@ -18,9 +18,15 @@ baseurl={{ repository.baseurl }}
    repository.gpgkey is defined %}
 
 ## Signature verification
-{%   if repository.repo_gpgcheck %}repo_gpgcheck={{ repository.repo_gpgcheck | bool }}{% endif %}
-{%   if repository.gpgcheck %}gpgcheck={{ repository.gpgcheck | bool }}{% endif %}
-{%   if repository.gpgkey %}gpgkey={{ repository.gpgkey | bool }}{% endif %}
+{% endif %}
+{% if repository.repo_gpgcheck is defined %}
+repo_gpgcheck={{ repository.repo_gpgcheck | bool }}
+{% endif %}
+{% if repository.gpgcheck is defined %}
+gpgcheck={{ repository.gpgcheck | bool }}
+{% endif %}
+{% if repository.gpgkey is defined %}
+gpgkey={{ repository.gpgkey | bool }}
 {% endif %}
 
 ## Options
