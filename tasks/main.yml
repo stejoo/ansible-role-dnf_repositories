@@ -61,11 +61,6 @@
     group: root
     mode: 0644
 
-- name: Disable repository management by Red Hat Subscription Management
-  community.general.redhat_subscription:
-    state: absent
-  when: ansible_facts.distribution == "RedHat" and repositories_managed
-
 - name: Place hint of disabled default repository directory
   ansible.builtin.copy:
     content: |
