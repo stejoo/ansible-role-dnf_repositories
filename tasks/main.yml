@@ -48,6 +48,7 @@
   loop: "{{ dnf_repositories }}"
   loop_control:
     loop_var: repository
+  when: repository.state is not defined or repository.state != 'absent'
 
 - name: Configure DNF package manager to managed repository directory
   community.general.ini_file:
