@@ -15,7 +15,7 @@
 
 - name: Manage repository file directory
   ansible.builtin.file:
-    path: "{{ repositories_managed_dir }}"
+    path: "{{ dnf_repositories_managed_dir }}"
     state: directory
     owner: root
     group: root
@@ -31,7 +31,7 @@
 
 - name: Clean-up repositories set as absent
   ansible.builtin.file:
-    path: "{{ repositories_managed_dir }}/{{ repository.name }}.repo"
+    path: "{{ dnf_repositories_managed_dir }}/{{ repository.name }}.repo"
     state: absent
   loop: "{{ dnf_repositories }}"
   loop_control:
@@ -41,7 +41,7 @@
 - name: Manage repository configuration file(s)
   ansible.builtin.template:
     src: rpm_repository.repo.j2
-    dest: "{{ repositories_managed_dir }}/{{ repository.name }}.repo"
+    dest: "{{ dnf_repositories_managed_dir }}/{{ repository.name }}.repo"
     owner: root
     group: root
     mode: 0644
@@ -55,8 +55,8 @@
     path: /etc/dnf/dnf.conf
     section: main
     option: reposdir
-    value: "{{ repositories_managed_dir }}"
-    state: "{% if repositories_managed %}present{% else %}absent{% endif %}"
+    value: "{{ dnf_repositories_managed_dir }}"
+    state: "{% if dnf_repositories_managed %}present{% else %}absent{% endif %}"
     no_extra_spaces: true
     owner: root
     group: root
@@ -66,15 +66,15 @@
   ansible.builtin.copy:
     content: |
       Reading *.repo files from this location has been disabled.
-      Repositories are managed by Ansible in {{ repositories_managed_dir }}
+      Repositories are managed by Ansible in {{ dnf_repositories_managed_dir }}
     dest: "{{ repositories_default_dir }}/DISABLED.README"
     owner: root
     group: root
     mode: 0644
-  when: repositories_managed
+  when: dnf_repositories_managed
 
 - name: Remove hint in default repository directory
   ansible.builtin.file:
     path: "{{ repositories_default_dir }}/DISABLED.README"
     state: absent
-  when: not repositories_managed
+  when: not dnf_repositories_managed

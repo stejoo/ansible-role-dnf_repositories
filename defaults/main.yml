@@ -4,7 +4,7 @@
 # Default fallback paths if no distribution specific variant was found
 # look at vars/<distro specific file>.yml for yours.
 repositories_default_dir: /etc/yum.repos.d
-repositories_managed_dir: /etc/yum.repos.managed
+dnf_repositories_managed_dir: /etc/yum.repos.managed
 
 # List of RPM package signing keys to make sure are present on the system.
 # uses subkeys: =key, state, fingerprint and validate_certs.
@@ -12,7 +12,7 @@ rpm_keys: []
 
 # Instruct package manager to use managed repositories directory.
 # Also unsubscribes from Red Hat Subscription Management on RHEL systems.
-repositories_managed: true
+dnf_repositories_managed: true
 
 dnf_repositories: []
 # example:

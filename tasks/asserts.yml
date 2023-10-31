@@ -10,11 +10,11 @@
     quiet: true
 
 # would like to test for valid "path" value here, any ideas?
-- name: Test if repositories_managed_dir is set correctly
+- name: Test if dnf_repositories_managed_dir is set correctly
   ansible.builtin.assert:
     that:
-      - repositories_managed_dir is defined
-      - repositories_managed_dir is string
+      - dnf_repositories_managed_dir is defined
+      - dnf_repositories_managed_dir is string
     quiet: true
 
 - name: Test if rpm_keys is set correctly
@@ -76,10 +76,10 @@
     - rpm_keys is defined
     - item.validate_certs is defined
 
-- name: Test if repositories_managed is set correctly
+- name: Test if dnf_repositories_managed is set correctly
   ansible.builtin.assert:
     that:
-      - repositories_managed is boolean
+      - dnf_repositories_managed is boolean
     quiet: true
 
 - name: Test if dnf_repositories is set correctly

@@ -3,7 +3,7 @@
 - name: Download key file to host
   ansible.builtin.get_url:
     url: "{{ item.key }}"
-    dest: "{{ repositories_managed_dir }}/{{ item.key | basename }}"
+    dest: "{{ dnf_repositories_managed_dir }}/{{ item.key | basename }}"
     owner: root
     group: root
     mode: 0644
@@ -15,7 +15,7 @@
 - name: Copy key file to host
   ansible.builtin.copy:
     src: "{{ item.key }}"
-    dest: "{{ repositories_managed_dir }}/{{ item.key | basename }}"
+    dest: "{{ dnf_repositories_managed_dir }}/{{ item.key | basename }}"
     owner: root
     group: root
     mode: 0644
@@ -26,7 +26,7 @@
 
 - name: Ensure state of keys in RPM key database
   ansible.builtin.rpm_key:
-    key: "{{ repositories_managed_dir }}/{{ item.key | basename }}"
+    key: "{{ dnf_repositories_managed_dir }}/{{ item.key | basename }}"
     state: "{{ item.state | default('present') }}"
     fingerprint: "{{ item.fingerprint | default(omit) }}"
     validate_certs: "{{ item.validate_certs | default(omit) }}"

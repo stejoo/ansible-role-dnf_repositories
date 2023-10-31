@@ -11,7 +11,7 @@ This role depends on collection `community.general`.
 Role Variables
 --------------
 
-* `repositories_managed`: Instruct DNF to use the managed repos directory instead of default directory. (`true`)
+* `dnf_repositories_managed`: Instruct DNF to use the managed repos directory instead of default directory. (`true`)
 * `rpm_keys`: List of RPM signing keys to manage the state of.
               Review documentation of module `ansible.builtin.rpm_key` for more details
   * `key` (required): Key that will be modified. Can be a url, a file on the managed node, or a
