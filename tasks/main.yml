@@ -3,14 +3,19 @@
 
 - name: Load OS specific variables
   ansible.builtin.include_vars:
-    file: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution | lower }}.yml"
-    - "{{ ansible_os_family | lower }}.yml"
+    file: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
+      paths:
+        - 'vars'
+      skip: true
 
 - name: Pre-flight checks
-  ansible.builtin.import_tasks:
+  ansible.builtin.include_tasks:
     file: "asserts.yml"
 
 - name: Manage repository file directory
