@@ -2,11 +2,11 @@
 # assertions for dnf_repositories
 
 # would like to test for valid "path" value here, any ideas?
-- name: Test if repositories_default_dir is set correctly
+- name: Test if dnf_repositories_default_dir is set correctly
   ansible.builtin.assert:
     that:
-      - repositories_default_dir is defined
-      - repositories_default_dir is string
+      - dnf_repositories_default_dir is defined
+      - dnf_repositories_default_dir is string
     quiet: true
 
 # would like to test for valid "path" value here, any ideas?

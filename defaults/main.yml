@@ -3,7 +3,7 @@
 
 # Default fallback paths if no distribution specific variant was found
 # look at vars/<distro specific file>.yml for yours.
-repositories_default_dir: /etc/yum.repos.d
+dnf_repositories_default_dir: /etc/yum.repos.d
 dnf_repositories_managed_dir: /etc/yum.repos.managed
 
 # List of RPM package signing keys to make sure are present on the system.
