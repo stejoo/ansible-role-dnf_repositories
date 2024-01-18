@@ -37,3 +37,6 @@ metadata_expire={{ repository.metadata_expire }}
 {% if repository.skip_if_unavailable is defined %}
 skip_if_unavailable={{ repository.skip_if_unavailable | bool }}
 {% endif %}
+{% if repository.excludepkgs is defined %}
+excludepkgs={{ repository.excludepkgs | join(',') }}
+{% endif %}

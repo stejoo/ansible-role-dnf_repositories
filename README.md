@@ -30,6 +30,7 @@ Role Variables
   * `metalink`
   * `repo_gpgcheck`
   * `skip_if_unavailable`
+  * `excludepkgs`: list of package specifiers (name or glob) to exclude from this repository.
 
 Example Playbook
 ----------------
@@ -60,6 +61,8 @@ Including an example of how to use your role (for instance, with variables passe
             enabled: true
             metadata_expire: 7d
             skip_if_unavailable: false
+            excludepkgs:
+              - 'java-17-openjdk*'
 
 
       roles:

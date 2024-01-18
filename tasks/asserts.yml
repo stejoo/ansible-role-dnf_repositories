@@ -255,3 +255,17 @@
   when:
     - dnf_repositories is defined
     - item.skip_if_unavailable is defined
+
+- name: Test if item.excludepkgs in dnf_repositories is set correctly
+  ansible.builtin.assert:
+    that:
+      - item.excludepkgs is not mapping
+      - item.excludepkgs is not string
+      - item.excludepkgs is iterable
+    quiet: true
+  loop: "{{ dnf_repositories }}"
+  loop_control:
+    label: "{{ item.excludepkgs | default('none') }}"
+  when:
+    - dnf_repositories is defined
+    - item.excludepkgs is defined
