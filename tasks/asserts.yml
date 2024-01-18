@@ -17,64 +17,62 @@
       - dnf_repositories_managed_dir is string
     quiet: true
 
-- name: Test if rpm_keys is set correctly
-  ansible.builtin.assert:
-    that:
-      - rpm_keys is not string
-      - rpm_keys is iterable
-      - rpm_keys is not mapping
-    quiet: true
-  when:
-    - rpm_keys is defined
+- name: Tests for rpm_keys definition
+  when: rpm_keys is defined
+  block:
+    - name: Test if rpm_keys is set correctly
+      ansible.builtin.assert:
+        that:
+          - rpm_keys is not string
+          - rpm_keys is iterable
+          - rpm_keys is not mapping
+        quiet: true
 
-- name: Test if item.key in rpm_keys is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.key is defined
-      - item.key is string
-    quiet: true
-  loop: "{{ rpm_keys }}"
-  loop_control:
-    label: "{{ item.key | default('none') }}"
-  when:
-    - rpm_keys is defined
+    - name: Test if item.key in rpm_keys is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.key is defined
+          - item.key is string
+        quiet: true
+      loop: "{{ rpm_keys }}"
+      loop_control:
+        label: "{{ item.key | default('none') }}"
 
-- name: Test if item.state in rpm_keys is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.state is string
-      - item.state in ["present", "absent"]
-    quiet: true
-  loop: "{{ rpm_keys }}"
-  loop_control:
-    label: "{{ item.state | default('none') }}"
-  when:
-    - rpm_keys is defined
-    - item.state is defined
+    - name: Test if item.state in rpm_keys is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.state is string
+          - item.state in ["present", "absent"]
+        quiet: true
+      loop: "{{ rpm_keys }}"
+      loop_control:
+        label: "{{ item.state | default('none') }}"
+      when:
+        - item.state is defined
 
-- name: Test if item.fingerprint in rpm_keys is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.fingerprint is string
-    quiet: true
-  loop: "{{ rpm_keys }}"
-  loop_control:
-    label: "{{ item.fingerprint | default('none') }}"
-  when:
-    - rpm_keys is defined
-    - item.fingerprint is defined
+    - name: Test if item.fingerprint in rpm_keys is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.fingerprint is string
+        quiet: true
+      loop: "{{ rpm_keys }}"
+      loop_control:
+        label: "{{ item.fingerprint | default('none') }}"
+      when:
+        - item.fingerprint is defined
 
-- name: Test if item.validate_certs in rpm_keys is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.validate_certs is boolean
-    quiet: true
-  loop: "{{ rpm_keys }}"
-  loop_control:
-    label: "{{ item.validate_certs | default('none') }}"
-  when:
-    - rpm_keys is defined
-    - item.validate_certs is defined
+    - name: Test if item.validate_certs in rpm_keys is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.validate_certs is boolean
+        quiet: true
+      loop: "{{ rpm_keys }}"
+      loop_control:
+        label: "{{ item.validate_certs | default('none') }}"
+      when:
+        - item.validate_certs is defined
+# End of tests for rpm_keys definition
+
 
 - name: Test if dnf_repositories_managed is set correctly
   ansible.builtin.assert:
@@ -82,190 +80,177 @@
       - dnf_repositories_managed is boolean
     quiet: true
 
-- name: Test if dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - dnf_repositories is iterable
-      - dnf_repositories is not mapping
-    quiet: true
-  when:
-    - dnf_repositories is defined
 
-- name: Test if item.name in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.name is defined
-      - item.name is string
-      - item.name is match('^[A-Za-z0-9-_:\.][A-Za-z0-9-_:\.]*$')
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.name | default('none') }}"
-  when:
-    - dnf_repositories is defined
+- name: Tests for dnf_repositories definition
+  when: dnf_repositories is defined
+  block:
+    - name: Test if dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - dnf_repositories is iterable
+          - dnf_repositories is not mapping
+        quiet: true
 
-- name: Test if item in dnf_repositories has baseurl or mirrorlist or metalink set
-  ansible.builtin.assert:
-    that:
-      - item.baseurl is defined or item.mirrorlist is defined or item.metalink is defined
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.name | default('none') }}"
-  when:
-    - dnf_repositories is defined
+    - name: Test if item.name in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.name is defined
+          - item.name is string
+          - item.name is match('^[A-Za-z0-9-_:\.][A-Za-z0-9-_:\.]*$')
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.name | default('none') }}"
 
-- name: Test if item.baseurl in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.baseurl is string
-      - item.baseurl is url(schemes=['file', 'ftp', 'ftps', 'http', 'https'])
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.baseurl | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.baseurl is defined
+    - name: Test if item in dnf_repositories has baseurl or mirrorlist or metalink set
+      ansible.builtin.assert:
+        that:
+          - item.baseurl is defined or item.mirrorlist is defined or item.metalink is defined
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.name | default('none') }}"
 
-- name: Test if item.mirrorlist in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.mirrorlist is string
-      - item.mirrorlist is uri(schemes=['http', 'https'])
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.mirrorlist | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.mirrorlist is defined
+    - name: Test if item.baseurl in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.baseurl is string
+          - item.baseurl is url(schemes=['file', 'ftp', 'ftps', 'http', 'https'])
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.baseurl | default('none') }}"
+      when:
+        - item.baseurl is defined
 
-- name: Test if item.metalink in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.metalink is string
-      - item.metalink is uri(schemes=['http', 'https'])
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.metalink | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.metalink is defined
+    - name: Test if item.mirrorlist in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.mirrorlist is string
+          - item.mirrorlist is uri(schemes=['http', 'https'])
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.mirrorlist | default('none') }}"
+      when:
+        - item.mirrorlist is defined
 
-- name: Test if item.description in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.description is string
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.description | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.description is defined
+    - name: Test if item.metalink in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.metalink is string
+          - item.metalink is uri(schemes=['http', 'https'])
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.metalink | default('none') }}"
+      when:
+        - item.metalink is defined
 
-- name: Test if item.repo_gpgcheck in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.repo_gpgcheck is boolean
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.repo_gpgcheck | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.repo_gpgcheck is defined
+    - name: Test if item.description in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.description is string
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.description | default('none') }}"
+      when:
+        - item.description is defined
 
-- name: Test if item.gpgcheck in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.gpgcheck is boolean
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.gpgcheck | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.gpgcheck is defined
+    - name: Test if item.repo_gpgcheck in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.repo_gpgcheck is boolean
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.repo_gpgcheck | default('none') }}"
+      when:
+        - item.repo_gpgcheck is defined
 
-- name: Test if item.gpgkey in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.gpgkey is string
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.gpgkey | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.gpgkey is defined
+    - name: Test if item.gpgcheck in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.gpgcheck is boolean
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.gpgcheck | default('none') }}"
+      when:
+        - item.gpgcheck is defined
 
-- name: Test if item.enabled in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.enabled is boolean
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.enabled | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.enabled is defined
+    - name: Test if item.gpgkey in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.gpgkey is string
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.gpgkey | default('none') }}"
+      when:
+        - item.gpgkey is defined
 
-- name: Test if item.metadata_expire in dnf_repositories is set as correct integer
-  ansible.builtin.assert:
-    that:
-      - item.metadata_expire is integer
-      - item.metadata_expire >= -1
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.metadata_expire | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.metadata_expire is defined
-    - item.metadata_expire is integer
+    - name: Test if item.enabled in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.enabled is boolean
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.enabled | default('none') }}"
+      when:
+        - item.enabled is defined
 
-- name: Test if item.metadata_expire in dnf_repositories is set as correct string
-  ansible.builtin.assert:
-    that:
-      - item.metadata_expire is string
-      - item.metadata_expire == 'never' or
-        item.metadata_expire == '-1' or
-        item.metadata_expire is match('^[0-9][0-9]*[sSdDhHdD]$')
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.metadata_expire | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.metadata_expire is defined
-    - item.metadata_expire is not integer
+    - name: Test if item.metadata_expire in dnf_repositories is set as correct integer
+      ansible.builtin.assert:
+        that:
+          - item.metadata_expire is integer
+          - item.metadata_expire >= -1
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.metadata_expire | default('none') }}"
+      when:
+        - item.metadata_expire is defined
+        - item.metadata_expire is integer
 
-- name: Test if item.skip_if_unavailable in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.skip_if_unavailable is boolean
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.skip_if_unavailable | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.skip_if_unavailable is defined
+    - name: Test if item.metadata_expire in dnf_repositories is set as correct string
+      ansible.builtin.assert:
+        that:
+          - item.metadata_expire is string
+          - item.metadata_expire == 'never' or
+            item.metadata_expire == '-1' or
+            item.metadata_expire is match('^[0-9][0-9]*[sSdDhHdD]$')
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.metadata_expire | default('none') }}"
+      when:
+        - item.metadata_expire is defined
+        - item.metadata_expire is not integer
 
-- name: Test if item.excludepkgs in dnf_repositories is set correctly
-  ansible.builtin.assert:
-    that:
-      - item.excludepkgs is not mapping
-      - item.excludepkgs is not string
-      - item.excludepkgs is iterable
-    quiet: true
-  loop: "{{ dnf_repositories }}"
-  loop_control:
-    label: "{{ item.excludepkgs | default('none') }}"
-  when:
-    - dnf_repositories is defined
-    - item.excludepkgs is defined
+    - name: Test if item.skip_if_unavailable in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.skip_if_unavailable is boolean
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.skip_if_unavailable | default('none') }}"
+      when:
+        - item.skip_if_unavailable is defined
+
+    - name: Test if item.excludepkgs in dnf_repositories is set correctly
+      ansible.builtin.assert:
+        that:
+          - item.excludepkgs is not mapping
+          - item.excludepkgs is not string
+          - item.excludepkgs is iterable
+        quiet: true
+      loop: "{{ dnf_repositories }}"
+      loop_control:
+        label: "{{ item.excludepkgs | default('none') }}"
+      when:
+        - item.excludepkgs is defined
+# End of tests for dnf_repositories definition
