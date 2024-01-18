@@ -17,6 +17,7 @@
 - name: Pre-flight checks
   ansible.builtin.include_tasks:
     file: "asserts.yml"
+  run_once: true
 
 - name: Manage repository file directory
   ansible.builtin.file:
